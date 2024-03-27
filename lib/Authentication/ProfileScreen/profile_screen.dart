@@ -17,6 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  List<String> errorMessages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return 'Bắt buộc phải nhập tên';
                       }
                       return null;
-                    }),
+                    }, const Icon(null), null),
                     const SizedBox(
                       height: 22,
                     ),
@@ -64,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return 'Vui lòng chọn giới tính';
                       }
                       return null;
-                    }),
+                    }, const Icon(Icons.arrow_drop_down_outlined), null),
                     const SizedBox(
                       height: 22,
                     ),
@@ -78,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return 'Vui lòng nhập số điện thoại';
                       }
                       return null;
-                    }),
+                    }, const Icon(null), null),
                     const SizedBox(
                       height: 22,
                     ),
@@ -92,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return 'Vui lòng nhập địa chỉ';
                       }
                       return null;
-                    }),
+                    }, const Icon(null), null),
                     const SizedBox(
                       height: 22,
                     ),
@@ -106,14 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return 'Vui lòng nhập email';
                       }
                       return null;
-                    }),
+                    }, const Icon(null), null),
                     const SizedBox(
                       height: 16,
                     ),
                     InkWell(
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
-                          print('aloalo');
+                          // print('aloalo');
                         }
                       },
                       child: Container(
@@ -139,20 +140,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Stack customTextField(
+  //     TextEditingController textEditingController,
+  //     TextInputType textInputType,
+  //     String labelText,
+  //     String hintText,
+  //     Color colorHintText,
+  //     String? Function(String?)? validator) {
+  //   return Stack(
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.only(top: 10.0),
+  //         child: TextFormField(
+  //           // cursorColor: Colors.black,
+  //           readOnly: false,
+  //           controller: textEditingController,
+  //           keyboardType: textInputType,
+  //           style: const TextStyle(
+  //               color: AppColors.colorLabelText,
+  //               fontWeight: FontWeight.normal,
+  //               fontSize: 15),
+  //           obscureText: false,
+  //           decoration: InputDecoration(
+  //               filled: true,
+  //               fillColor: Colors.white,
+  //               // isDense: true,
+  //               hintStyle: TextStyle(
+  //                   color: colorHintText,
+  //                   fontSize: 14,
+  //                   fontWeight: FontWeight.w400),
+  //               border: const OutlineInputBorder(
+  //                   borderSide:
+  //                       BorderSide(width: 1, color: AppColors.colorBorder),
+  //                   borderRadius: BorderRadius.all(Radius.circular(8))),
+  //               contentPadding: const EdgeInsets.all(20),
+  //               suffixIcon: const IconButton(onPressed: null, icon: Icon(null)),
+  //               hintText: hintText, // change here hinttext
+  //               // labelText: 'asdasdsad',
+  //               enabledBorder: const OutlineInputBorder(
+  //                   borderRadius: BorderRadius.all(Radius.circular(8)),
+  //                   borderSide:
+  //                       BorderSide(width: 1, color: AppColors.colorBorder)),
+  //               errorBorder: const OutlineInputBorder(
+  //                   borderRadius: BorderRadius.all(Radius.circular(8)),
+  //                   borderSide: BorderSide(width: 1, color: Colors.red)),
+  //               focusedBorder: const OutlineInputBorder(
+  //                 borderRadius: BorderRadius.all(Radius.circular(8)),
+  //                 borderSide: BorderSide(width: 1, color: Colors.black),
+  //               )),
+  //           validator: validator,
+  //           // onSaved: onSaved,
+  //           // onChanged: onChanged,
+  //         ),
+  //       ),
+  //       Positioned(
+  //         top: 2,
+  //         left: 8,
+  //         child: Padding(
+  //           padding: const EdgeInsets.symmetric(horizontal: 8),
+  //           child: Container(
+  //             height: 20,
+  //             color: Colors.white,
+  //             child: Padding(
+  //                 padding: const EdgeInsets.only(left: 4),
+  //                 child: RichText(
+  //                     text: TextSpan(children: [
+  //                   TextSpan(
+  //                     text: labelText,
+  //                     style: const TextStyle(
+  //                       fontWeight: FontWeight.w400,
+  //                       fontSize: 12,
+  //                       color: AppColors.colorLabelText,
+  //                     ),
+  //                   ),
+  //                   const TextSpan(
+  //                     text: ' *',
+  //                     style: TextStyle(
+  //                       fontWeight: FontWeight.w400,
+  //                       fontSize: 12,
+  //                       color: AppColors.saoColor,
+  //                     ),
+  //                   ),
+  //                 ]))),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   Stack customTextField(
       TextEditingController textEditingController,
       TextInputType textInputType,
       String labelText,
       String hintText,
       Color colorHintText,
-      String? Function(String?)? validator) {
+      String? Function(String?)? validator,
+      Icon icon,
+      Function()? onPressed) {
     return Stack(
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 10.0),
           child: TextFormField(
-            // cursorColor: Colors.black,
-            readOnly: false,
             controller: textEditingController,
             keyboardType: textInputType,
             style: const TextStyle(
@@ -161,35 +251,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fontSize: 15),
             obscureText: false,
             decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                // isDense: true,
-                hintStyle: TextStyle(
-                    color: colorHintText,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-                border: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(width: 1, color: AppColors.colorBorder),
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-                contentPadding: const EdgeInsets.all(20),
-                suffixIcon: const IconButton(onPressed: null, icon: Icon(null)),
-                hintText: hintText, // change here hinttext
-                // labelText: 'asdasdsad',
-                enabledBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    borderSide:
-                        BorderSide(width: 1, color: AppColors.colorBorder)),
-                errorBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    borderSide: BorderSide(width: 1, color: Colors.red)),
-                focusedBorder: const OutlineInputBorder(
+              filled: true,
+              fillColor: Colors.white,
+              hintStyle: TextStyle(
+                  color: colorHintText,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400),
+              border: const OutlineInputBorder(
+                  borderSide:
+                      BorderSide(width: 1, color: AppColors.colorBorder),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              contentPadding: const EdgeInsets.all(20),
+              suffixIcon: IconButton(onPressed: onPressed, icon: icon),
+              hintText: hintText,
+              enabledBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
-                  borderSide: BorderSide(width: 1, color: Colors.black),
-                )),
+                  borderSide:
+                      BorderSide(width: 1, color: AppColors.colorBorder)),
+              errorBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  borderSide: BorderSide(width: 1, color: Colors.red)),
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(width: 1, color: AppColors.colorButton),
+              ),
+            ),
             validator: validator,
-            // onSaved: onSaved,
-            // onChanged: onChanged,
           ),
         ),
         Positioned(
