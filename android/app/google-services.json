@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "740095469385",
+    "project_id": "cydevaluaapplication",
+    "storage_bucket": "cydevaluaapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740095469385:android:82ba5274996f0ef8719c98",
+        "android_client_info": {
+          "package_name": "com.example.cydeva_lua_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740095469385-pm7onihu9ocuoglv7sdj86bog71bqv3h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy7qUF99g7R21ow183QVNo57TirkMK8gU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740095469385-pm7onihu9ocuoglv7sdj86bog71bqv3h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "740095469385-rdlcct8gf5v53d255dhs2m0f9uci82h9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cydevaLuaApplication"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

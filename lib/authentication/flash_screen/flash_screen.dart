@@ -1,4 +1,4 @@
-import 'package:cydeva_lua_application/Authentication/SignInScreen/signin_screen.dart';
+import 'package:cydeva_lua_application/authentication/sign_in_screen/signin_screen.dart';
 import 'package:cydeva_lua_application/common/colors/Colors.dart';
 import 'package:flutter/material.dart';
 

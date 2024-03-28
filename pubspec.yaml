@@ -37,6 +37,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: 6.1.0
   flutter_svg: ^2.0.10+1
+  shared_preferences: ^2.2.2
+  image_picker: ^1.0.4
+  image_cropper: ^5.0.1
+  firebase_core: ^2.27.2
+  firebase_auth: ^4.18.0
+  google_sign_in: ^6.2.1
+
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +72,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/icons/
-    - assets/fonts/
+   
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
