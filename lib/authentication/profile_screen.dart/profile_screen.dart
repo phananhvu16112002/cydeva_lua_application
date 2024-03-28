@@ -540,7 +540,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Row(
               children: [
-                SvgPicture.asset('assets/icons/arrowback.svg'),
+                InkWell(onTap: (){
+                  Navigator.pop(context);
+                },child: SvgPicture.asset('assets/icons/arrowback.svg')),
                 const SizedBox(
                   width: 100,
                 ),

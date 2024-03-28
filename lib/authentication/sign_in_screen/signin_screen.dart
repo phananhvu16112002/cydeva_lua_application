@@ -1,3 +1,4 @@
+import 'package:cydeva_lua_application/authentication/profile_screen.dart/profile_screen.dart';
 import 'package:cydeva_lua_application/common/colors/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -69,8 +70,16 @@ class _SignInPageState extends State<SignInPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          methodSignIn(
-                              'Đăng nhập với Apple', 'assets/icons/apple.svg'),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) => ProfileScreen()));
+                            },
+                            child: methodSignIn('Đăng nhập với Apple',
+                                'assets/icons/apple.svg'),
+                          ),
                           const SizedBox(height: 16),
                           methodSignIn(
                               'Đăng nhập với Google', 'assets/icons/google.svg')
