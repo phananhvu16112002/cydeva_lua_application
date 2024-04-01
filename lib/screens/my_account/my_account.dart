@@ -2,26 +2,34 @@ import 'dart:io';
 
 import 'package:cydeva_lua_application/common/bases/custom_text.dart';
 import 'package:cydeva_lua_application/common/colors/Colors.dart';
+import 'package:cydeva_lua_application/screens/authentication/register_screen/bloc/register_bloc.dart';
+import 'package:cydeva_lua_application/screens/authentication/sign_in_screen/bloc/signin_bloc.dart';
+import 'package:cydeva_lua_application/screens/my_account/my_account_bloc.dart';
+import 'package:cydeva_lua_application/screens/wishlist_screen/bloc/wishlist_bloc.dart';
+import 'package:cydeva_lua_application/screens/wishlist_screen/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class MyAccountPage extends StatefulWidget {
+  const MyAccountPage({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<MyAccountPage> createState() => _MyAccountPageState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _MyAccountPageState extends State<MyAccountPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  // late SigninBloc signinBloc;
+  late MyAccountBloc myAccountBloc;
   final _formKey = GlobalKey<FormState>();
-  String selectedGender = 'Nam';
+  String selectedGender = 'male';
   String errorTextName = '';
   String errorTextPhone = '';
   String errorTextAddress = '';
@@ -38,6 +46,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(nameFocusNode);
     });
+    myAccountBloc = context.read<MyAccountBloc>();
+    myAccountBloc.add(InforUserInitial());
   }
 
   @override
@@ -54,114 +64,257 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.neutralWhite,
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  appbar(),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  customTextField(
-                    nameController,
-                    TextInputType.text,
-                    'Họ và tên',
-                    'Nhập họ và tên',
-                    AppColors.hintTextColor,
-                    const Icon(null),
-                    null,
-                    1000,
-                    errorTextName,
-                    FilteringTextInputFormatter.singleLineFormatter,
-                    nameFocusNode,
-                  ),
-                  const SizedBox(
-                    height: 22,
-                  ),
-                  dropdownvalue_gender(),
-                  const SizedBox(
-                    height: 22,
-                  ),
-                  customTextField(
-                      phoneController,
-                      TextInputType.phone,
-                      'Số điện thoại',
-                      'Nhập số điện thoại',
-                      AppColors.hintTextColor,
-                      const Icon(null),
-                      null,
-                      10,
-                      errorTextPhone,
-                      FilteringTextInputFormatter.digitsOnly,
-                      phoneFocusNode),
-                  const SizedBox(
-                    height: 22,
-                  ),
-                  customTextField(
-                      addressController,
-                      TextInputType.text,
-                      'Địa chỉ',
-                      'Nhập địa chỉ của bạn',
-                      AppColors.hintTextColor,
-                      const Icon(null),
-                      null,
-                      1000,
-                      errorTextAddress,
-                      FilteringTextInputFormatter.singleLineFormatter,
-                      addressFocusNode),
-                  const SizedBox(
-                    height: 22,
-                  ),
-                  customTextField(
-                      emailController,
-                      TextInputType.emailAddress,
-                      'Email',
-                      'sample@gmail.com',
-                      const Color(0xff2D3748),
-                      const Icon(null),
-                      null,
-                      1000,
-                      errorTextEmail,
-                      FilteringTextInputFormatter.singleLineFormatter,
-                      emailFocusNode),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _validateInputs();
-                    },
-                    child: Container(
-                      width: 400,
-                      height: 52,
-                      decoration: BoxDecoration(
-                          color: AppColors.colorButton,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: const Center(
-                        child: CustomText(
-                            message: 'Xác nhận',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.neutralWhite),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+      body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: BlocConsumer<MyAccountBloc, MyAccountState>(
+            listener: (context, state) {
+              // TODO: implement listener
+            },
+            bloc: myAccountBloc,
+            builder: (context, state) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: (state.status == AccountStatus.loading)
+                      ? Center(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 200,
+                                  color: AppColors.neutralWhite,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 0),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: SvgPicture.asset(
+                                                    'assets/icons/arrowback.svg')),
+                                            const SizedBox(
+                                              width: 100,
+                                            ),
+                                            const CustomText(
+                                                message: 'Thông tin cá nhân ',
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700,
+                                                color:
+                                                    AppColors.colorTextAppbar),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 35,
+                                        ),
+                                        Center(
+                                          child: Stack(
+                                            children: [
+                                              file != null
+                                                  ? Container(
+                                                      width: 100,
+                                                      height: 100,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                        color: Colors.white,
+                                                        image: DecorationImage(
+                                                          image: FileImage(
+                                                              File(file!.path)),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                      child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(50),
+                                                          child: Image.network(
+                                                            state.userModel!
+                                                                .avatar!,
+                                                            width: 100,
+                                                            height: 100,
+                                                          ))),
+                                              Positioned(
+                                                top: 60,
+                                                left: 60,
+                                                child: Container(
+                                                  width: 40,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            24),
+                                                    color:
+                                                        AppColors.colorCamera,
+                                                  ),
+                                                  child: Center(
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        showModalBottomSheet(
+                                                          context: context,
+                                                          builder: (builder) =>
+                                                              bottomSheet(),
+                                                        );
+                                                      },
+                                                      child: SvgPicture.asset(
+                                                        'assets/icons/camera.svg',
+                                                        width: 22,
+                                                        height: 18,
+                                                        fit: BoxFit.none,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                customTextField(
+                                  nameController,
+                                  TextInputType.text,
+                                  'Họ và tên',
+                                  'Nhập họ và tên',
+                                  AppColors.hintTextColor,
+                                  const Icon(null),
+                                  null,
+                                  1000,
+                                  errorTextName,
+                                  FilteringTextInputFormatter
+                                      .singleLineFormatter,
+                                  nameFocusNode,
+                                ),
+                                const SizedBox(
+                                  height: 22,
+                                ),
+                                dropdownvalue_gender(),
+                                const SizedBox(
+                                  height: 22,
+                                ),
+                                customTextField(
+                                    phoneController,
+                                    TextInputType.phone,
+                                    'Số điện thoại',
+                                    'Nhập số điện thoại',
+                                    AppColors.hintTextColor,
+                                    const Icon(null),
+                                    null,
+                                    10,
+                                    errorTextPhone,
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    phoneFocusNode),
+                                const SizedBox(
+                                  height: 22,
+                                ),
+                                customTextField(
+                                    addressController,
+                                    TextInputType.text,
+                                    'Địa chỉ',
+                                    'Nhập địa chỉ của bạn',
+                                    AppColors.hintTextColor,
+                                    const Icon(null),
+                                    null,
+                                    1000,
+                                    errorTextAddress,
+                                    FilteringTextInputFormatter
+                                        .singleLineFormatter,
+                                    addressFocusNode),
+                                const SizedBox(
+                                  height: 22,
+                                ),
+                                customTextField(
+                                    emailController,
+                                    TextInputType.emailAddress,
+                                    'Email',
+                                    'sample@gmail.com',
+                                    const Color(0xff2D3748),
+                                    const Icon(null),
+                                    null,
+                                    1000,
+                                    errorTextEmail,
+                                    FilteringTextInputFormatter
+                                        .singleLineFormatter,
+                                    emailFocusNode),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                BlocBuilder<RegisterBloc, RegisterState>(
+                                  builder: (context, state) {
+                                    return InkWell(
+                                      onTap: () {
+                                        _validateInputs();
+
+                                        context.read<RegisterBloc>().add(
+                                            RegisterSubmitted(
+                                                phoneNumber:
+                                                    phoneController.text,
+                                                fullName: nameController.text,
+                                                gender: selectedGender,
+                                                address: addressController.text,
+                                                xFile: file));
+                                      },
+                                      child: Container(
+                                        width: 400,
+                                        height: 52,
+                                        decoration: BoxDecoration(
+                                            color: AppColors.colorButton,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: const Center(
+                                          child: CustomText(
+                                              message: 'Lưu',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.neutralWhite),
+                                        ),
+                                      ),
+                                    );
+
+                                    // return Loading();
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                ),
+              );
+            },
+          )
+          // }
+          // return Center(child: CircularProgressIndicator());
+
           ),
-        ),
-      ),
     );
   }
 
@@ -207,7 +360,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 selectedGender = newValue!;
               });
             },
-            items: ['Nam', 'Nữ', 'Khác']
+            items: ['male', 'female', 'Others']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 alignment: Alignment.centerLeft,
@@ -336,6 +489,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: TextFormField(
+                onTapOutside: (event) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
                 focusNode: focusNode,
                 inputFormatters: [textInputFormatter],
                 maxLength: maxLength,
@@ -430,72 +586,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Center avatar() {
-  //   return Center(
-  //     child: Stack(
-  //       children: [
-  //         file != null
-  //             ? Container(
-  //                 width: 100,
-  //                 height: 100,
-  //                 decoration:
-  //                     BoxDecoration(borderRadius: BorderRadius.circular(24),color : Colors.white),
-  //                 child: Image.file(
-  //                   File(file!.path),
-  //                   // width: 40,
-  //                   // height: 40,
-  //                   fit: BoxFit.contain,
-  //                 ))
-  //             : Image.asset('assets/images/avatar.png'),
-  //         Positioned(
-  //           top: 60,
-  //           left: 60,
-  //           child: Container(
-  //             width: 40,
-  //             height: 40,
-  //             decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(24),
-  //                 color: AppColors.colorCamera),
-  //             child: Center(
-  //               child: InkWell(
-  //                 onTap: () {
-  //                   showModalBottomSheet(
-  //                       context: context, builder: (builder) => bottomSheet());
-  //                 },
-  //                 child: SvgPicture.asset(
-  //                   'assets/icons/camera.svg',
-  //                   width: 22,
-  //                   height: 18,
-  //                   fit: BoxFit.none,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Center avatar() {
     return Center(
       child: Stack(
         children: [
           file != null
               ? Container(
-                  width: 100, 
-                  height: 100, 
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.white,
                     image: DecorationImage(
                       image: FileImage(File(file!.path)),
-                      fit:
-                          BoxFit.cover, 
+                      fit: BoxFit.cover,
                     ),
                   ),
                 )
-              : Image.asset('assets/images/avatar.png',width: 100,height: 100,),
+              : Image.asset(
+                  'assets/images/avatar.png',
+                  width: 100,
+                  height: 100,
+                ),
           Positioned(
             top: 60,
             left: 60,
@@ -540,9 +652,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Row(
               children: [
-                InkWell(onTap: (){
-                  Navigator.pop(context);
-                },child: SvgPicture.asset('assets/icons/arrowback.svg')),
+                InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: SvgPicture.asset('assets/icons/arrowback.svg')),
                 const SizedBox(
                   width: 100,
                 ),
