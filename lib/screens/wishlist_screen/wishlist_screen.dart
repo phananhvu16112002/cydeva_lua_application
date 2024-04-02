@@ -1,7 +1,7 @@
 import 'package:cydeva_lua_application/common/bases/custom_button.dart';
 import 'package:cydeva_lua_application/common/colors/colors.dart';
 import 'package:cydeva_lua_application/models/favorite_model.dart';
-import 'package:cydeva_lua_application/screens/my_account/my_account_bloc.dart';
+import 'package:cydeva_lua_application/screens/my_account/bloc/my_account_bloc.dart';
 import 'package:cydeva_lua_application/screens/user_screen/user_screen.dart';
 import 'package:cydeva_lua_application/screens/wishlist_screen/bloc/wishlist_bloc.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,8 @@ class _WishListScreenState extends State<WishListScreen> {
     super.initState();
     wishlistBloc = context.read<WishlistBloc>();
     wishlistBloc.add(ListFavoriteInitital());
+    wishlistBloc.add(ListFavoriteChoosen());
+
   }
 
   @override
@@ -47,21 +49,19 @@ class _WishListScreenState extends State<WishListScreen> {
       body: BlocConsumer<WishlistBloc, WishlistState>(
         listener: (context, state) {
           if (state.status == WishlistStatus.submittedSuccess) {
-            print('Ok');
-
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (builder) => BlocProvider(
                           create: (context) => MyAccountBloc(),
-                          child: UserScreen(),
+                          child: const UserScreen(),
                         )));
           }
           if (state.status == WishlistStatus.failed) {
             showDialog(
                 context: context,
                 builder: (builder) => AlertDialog(
-                      title: Text(
+                      title: const Text(
                         'Failed',
                       ),
                       content: Text(state.message!),
@@ -70,7 +70,7 @@ class _WishListScreenState extends State<WishListScreen> {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('OK'))
+                            child: const Text('OK'))
                       ],
                     ));
             print('Failed');
@@ -83,7 +83,7 @@ class _WishListScreenState extends State<WishListScreen> {
             height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: (state.status == WishlistStatus.loading)
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : Column(
@@ -142,7 +142,12 @@ class _WishListScreenState extends State<WishListScreen> {
                               backgroundColorButton: AppColors.neutralWhite,
                               borderColor: AppColors.colorBorderWishList,
                               textColor: AppColors.colorBorderWishList,
-                              function: () {},
+                              function: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) => UserScreen()));
+                              },
                               height: 50,
                               width: 180,
                               fontSize: 16,

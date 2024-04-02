@@ -16,3 +16,8 @@ class SubmitFavorite extends WishlistEvent {
   List<FavoriteCategory>? listData;
   SubmitFavorite({this.listData});
 }
+
+class ListFavoriteChoosen extends WishlistEvent{
+  List<String>? listChoosen;
+  ListFavoriteChoosen({this.listChoosen});
+}

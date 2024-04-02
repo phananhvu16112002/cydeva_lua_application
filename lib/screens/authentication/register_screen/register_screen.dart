@@ -13,21 +13,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   late SigninBloc signinBloc;
   final _formKey = GlobalKey<FormState>();
-  String selectedGender = 'male';
+  String selectedGender = 'Male';
   String errorTextName = '';
   String errorTextPhone = '';
   String errorTextAddress = '';
@@ -68,7 +68,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
             if (state.status == BasesStatus.success) {
-              print('OK');
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -77,7 +76,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: WishListScreen(),
                           )));
             }
-            if (state.status == BaseStatus.failed) {
+            if (state.status == BasesStatus.failed) {
+              showDialog(
+                  context: context,
+                  builder: (builder) => AlertDialog(
+                        title: Text('Failed'),
+                        content: Text(state.message!),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Ok'))
+                        ],
+                      ));
+            }
+            if (state.status == BasesStatus.failedSubmitted) {
               showDialog(
                   context: context,
                   builder: (builder) => AlertDialog(
@@ -227,18 +241,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 16,
                           ),
                           customTextField(
-                            nameController,
-                            TextInputType.text,
-                            'Họ và tên',
-                            'Nhập họ và tên',
-                            AppColors.hintTextColor,
-                            const Icon(null),
-                            null,
-                            1000,
-                            errorTextName,
-                            FilteringTextInputFormatter.singleLineFormatter,
-                            nameFocusNode,
-                          ),
+                              nameController,
+                              TextInputType.text,
+                              'Họ và tên',
+                              'Nhập họ và tên',
+                              AppColors.hintTextColor,
+                              const Icon(null),
+                              null,
+                              1000,
+                              errorTextName,
+                              FilteringTextInputFormatter.singleLineFormatter,
+                              nameFocusNode,
+                              false),
                           const SizedBox(
                             height: 22,
                           ),
@@ -257,7 +271,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               10,
                               errorTextPhone,
                               FilteringTextInputFormatter.digitsOnly,
-                              phoneFocusNode),
+                              phoneFocusNode,
+                              false),
                           const SizedBox(
                             height: 22,
                           ),
@@ -272,7 +287,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               1000,
                               errorTextAddress,
                               FilteringTextInputFormatter.singleLineFormatter,
-                              addressFocusNode),
+                              addressFocusNode,
+                              false),
                           const SizedBox(
                             height: 22,
                           ),
@@ -287,7 +303,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               1000,
                               errorTextEmail,
                               FilteringTextInputFormatter.singleLineFormatter,
-                              emailFocusNode),
+                              emailFocusNode,
+                              true),
                           const SizedBox(
                             height: 16,
                           ),
@@ -298,12 +315,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   _validateInputs();
 
                                   context.read<RegisterBloc>().add(
-                                      RegisterSubmitted(
-                                          phoneNumber: phoneController.text,
-                                          fullName: nameController.text,
-                                          gender: selectedGender,
-                                          address: addressController.text,
-                                          xFile: file));
+                                      selectedGender != 'Others'
+                                          ? RegisterSubmitted(
+                                              phoneNumber: phoneController.text,
+                                              fullName: nameController.text,
+                                              gender:
+                                                  selectedGender.toLowerCase(),
+                                              address: addressController.text,
+                                              xFile: file)
+                                          : RegisterSubmitted(
+                                              phoneNumber: phoneController.text,
+                                              fullName: nameController.text,
+                                              gender: 'unknown',
+                                              address: addressController.text,
+                                              xFile: file));
                                 },
                                 child: Container(
                                   width: 400,
@@ -381,7 +406,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 selectedGender = newValue!;
               });
             },
-            items: ['male', 'female', 'Others']
+            items: ['Male', 'Female', 'Others']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 alignment: Alignment.centerLeft,
@@ -456,9 +481,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       nameFocusNode.requestFocus();
       return;
     }
-    if (phoneController.text.isEmpty) {
+    if (phoneController.text.isEmpty ||
+        phoneController.text.length != 10 ||
+        phoneController.text[0] != '0') {
       setState(() {
-        errorTextPhone = 'Vui lòng nhập số điện thoại';
+        errorTextPhone = 'Số điện thoại không hợp lệ';
         errorTextAddress = '';
         errorTextEmail = '';
         errorTextName = '';
@@ -501,7 +528,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       int maxLength,
       String? error,
       TextInputFormatter textInputFormatter,
-      FocusNode focusNode) {
+      FocusNode focusNode,
+      bool readOnly) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -510,6 +538,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: TextFormField(
+                readOnly: readOnly,
                 onTapOutside: (event) {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
@@ -551,7 +580,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         BorderSide(width: 1, color: AppColors.colorButton),
                   ),
                 ),
-                // validator: validator,
               ),
             ),
             Positioned(

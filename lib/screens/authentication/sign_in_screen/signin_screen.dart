@@ -6,6 +6,7 @@ import 'package:cydeva_lua_application/screens/authentication/sign_in_screen/blo
 import 'package:cydeva_lua_application/screens/user_screen/user_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,6 +31,10 @@ class _SignInPageState extends State<SignInPage> {
     // TODO: implement initState
     super.initState();
     _progressDialog = customLoading();
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.landscapeLeft,
+    //   DeviceOrientation.landscapeRight,
+    // ]);
   }
 
   ProgressDialog customLoading() {
@@ -74,7 +79,7 @@ class _SignInPageState extends State<SignInPage> {
                   MaterialPageRoute(
                       builder: (builder) => BlocProvider.value(
                             value: BlocProvider.of<SigninBloc>(context),
-                            child: const ProfileScreen(),
+                            child: const RegisterScreen(),
                           )));
               await _progressDialog.hide();
             }
@@ -151,15 +156,7 @@ class _SignInPageState extends State<SignInPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (builder) =>
-                                            const ProfileScreen(),
-                                      ),
-                                    );
-                                  },
+                                  onTap: () {},
                                   child: methodSignIn('Đăng nhập với Apple',
                                       'assets/icons/apple.svg'),
                                 ),

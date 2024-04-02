@@ -49,13 +49,13 @@ class _APIService implements APIService {
   }
 
   @override
-  Future<ResponseModel> getUserDetail() async {
+  Future<UserDetailModel> getUserDetail() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ResponseModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<UserDetailModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -71,7 +71,7 @@ class _APIService implements APIService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ResponseModel.fromJson(_result.data!);
+    final value = UserDetailModel.fromJson(_result.data!);
     return value;
   }
 

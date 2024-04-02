@@ -2,6 +2,7 @@ import 'package:cydeva_lua_application/models/favorite_response.dart';
 import 'package:cydeva_lua_application/models/model_test.dart';
 import 'package:cydeva_lua_application/models/response_model.dart';
 import 'package:cydeva_lua_application/models/social_auth_model/social_model.dart';
+import 'package:cydeva_lua_application/models/user_detail_model.dart';
 import 'package:cydeva_lua_application/models/user_model.dart';
 import 'package:cydeva_lua_application/utils/constants.dart';
 import 'package:retrofit/http.dart';
@@ -18,7 +19,7 @@ abstract class APIService {
   Future<SocialModel> socialAuth(@Body() Map<String, dynamic> mapData);
 
   @GET('/api/v1/auth/mb/user/detail/')
-  Future<ResponseModel> getUserDetail();
+  Future<UserDetailModel> getUserDetail();
 
   @PUT('/api/v1/auth/mb/user/update/')
   // @Header('multipart/form-data')
@@ -28,6 +29,5 @@ abstract class APIService {
   Future<ResponseFavorite> getFavoriteList();
 
   @POST('/api/v1/auth/mb/user/favorite/content/update/')
-  Future<ModelTest> updateFavoriteList(
-      @Body() Map<String, dynamic> mapJson);
+  Future<ModelTest> updateFavoriteList(@Body() Map<String, dynamic> mapJson);
 }

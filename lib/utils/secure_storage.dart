@@ -12,7 +12,7 @@ class SecureStorage {
   }
 
   Future<String> readSecureData(String key) async {
-    String value = await storage.read(key: key) ?? 'No Data Found';
+    String value = await storage.read(key: key) ?? '';
     return value;
   }
 

@@ -1,6 +1,6 @@
 part of 'register_bloc.dart';
 
-enum BasesStatus { init, success, failed, loading }
+enum BasesStatus { init, success, failed, loading, failedSubmitted }
 
 class RegisterState extends Equatable {
   final BasesStatus? status;

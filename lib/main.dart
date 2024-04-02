@@ -1,6 +1,7 @@
 import 'package:cydeva_lua_application/screens/authentication/register_screen/bloc/register_bloc.dart';
+import 'package:cydeva_lua_application/screens/home_screen/home_screen.dart';
 import 'package:cydeva_lua_application/screens/my_account/my_account.dart';
-import 'package:cydeva_lua_application/screens/my_account/my_account_bloc.dart';
+import 'package:cydeva_lua_application/screens/my_account/bloc/my_account_bloc.dart';
 import 'package:cydeva_lua_application/screens/test_screen/Test.dart';
 import 'package:cydeva_lua_application/screens/authentication/flash_screen/flash_screen.dart';
 import 'package:cydeva_lua_application/screens/authentication/register_screen/register_screen.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: false,
         ),
-        home: FlashScreen(),
+        home: HomeScreen(),
       ),
     );
   }

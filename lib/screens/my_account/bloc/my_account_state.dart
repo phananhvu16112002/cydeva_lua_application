@@ -1,6 +1,6 @@
 part of 'my_account_bloc.dart';
 
-enum AccountStatus { init, success, failed, loading }
+enum AccountStatus { init, success, failed, loading, submittedSuccess }
 
 class MyAccountState extends Equatable {
   final AccountStatus? status;

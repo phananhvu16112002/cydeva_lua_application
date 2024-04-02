@@ -80,6 +80,7 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
     response.then((value) {
       print(value.data!['token']);
       sharedPreferences.setString('accessToken', value.data!['token']);
+      // sharedPreferences.setString('deviceT', value)
     });
     // GoogleSignIn().signOut();
     return value;
